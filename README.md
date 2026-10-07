@@ -1,3 +1,14 @@
+# Campus Club Members - Full Stack Application
+
+This project is a full-stack Campus Club Members application developed using Node.js, Express.js, HTML, and MongoDB.
+
+## Features
+
+- Manage campus club members
+- Add and view member information
+- Node.js and Express backend
+- MongoDB database connectivity
+- Environment variables for database configuration
 NodeJS + Express
 ======================
 This is a simple NodeJS + Express application. This application serves as a basic template for a web server using NodeJS for the backend, Express as the web application framework.
