@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Club & Travel Buddy</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            margin: 30px;
+        }
+
+        .box {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            color: #1f3c88;
+        }
+
+        input, select {
+            padding: 9px;
+            margin: 5px;
+            width: 28%;
+        }
+
+        button {
+            padding: 9px 15px;
+            margin: 5px;
+            background: #1f3c88;
+            color: white;
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        pre {
+            background: #eee;
+            padding: 15px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Campus Club & Travel Buddy Manager</h1>
+
+<div class="box">
+
+<h2>Campus Club Members</h2>
+
+<h3>Add Member</h3>
+
+<form id="memberForm">
+
+<input id="memberId" placeholder="Member ID" required>
+<input id="memberName" placeholder="Name" required>
+<input id="clubName" placeholder="Club Name" required>
+<input id="year" type="number" placeholder="Year of Study" required>
+<input id="role" placeholder="Role" required>
+<input id="points" type="number" placeholder="Points" required>
+<input id="interests" placeholder="Interests" required>
+
+<select id="status">
+    <option>Active</option>
+    <option>Inactive</option>
+</select>
+
+<button>Add Member</button>
+
+</form>
+
+<button onclick="addSampleMembers()">
+    Add 4 Sample Members
+</button>
+
+<h3>Search Club Members</h3>
+
+<input id="sc" placeholder="Club Name">
+<input id="sp" type="number" placeholder="Minimum Points">
+
+<button onclick="searchMembers()">Search</button>
+
+<h3>Search Member by ID</h3>
+
+<input id="fm" placeholder="Member ID">
+<button onclick="findMember()">Find</button>
+
+<h3>Update Role and Points</h3>
+
+<input id="um" placeholder="Member ID">
+<input id="ur" placeholder="New Role">
+<input id="up" type="number" placeholder="New Points">
+
+<button onclick="updateMember()">Update</button>
+
+<h3>Increase Club Points</h3>
+
+<input id="ic" placeholder="Club Name">
+<input id="ia" type="number" placeholder="Amount">
+
+<button onclick="increasePoints()">Increase</button>
+
+<h3>Points Range</h3>
+
+<input id="minp" type="number" placeholder="Minimum Points">
+<input id="maxp" type="number" placeholder="Maximum Points">
+
+<button onclick="memberRange()">Search</button>
+
+<h3>Delete Member</h3>
+
+<input id="dm" placeholder="Member ID">
+
+<button onclick="deleteMember()">Delete</button>
+
+<h3>Remaining Members</h3>
+
+<button onclick="allMembers()">Display Members</button>
+
+<pre id="memberResult"></pre>
+
+</div>
+
+
+<div class="box">
+
+<h2>Travel Buddy Finder</h2>
+
+<h3>Add Travel Buddy</h3>
+
+<form id="buddyForm">
+
+<input id="buddyId" placeholder="Buddy ID" required>
+<input id="buddyName" placeholder="Name" required>
+<input id="destination" placeholder="Destination" required>
+<input id="age" type="number" placeholder="Age" required>
+<input id="budget" type="number" placeholder="Budget" required>
+<input id="duration" placeholder="Trip Duration" required>
+<input id="binterests" placeholder="Interests" required>
+
+<select id="bstatus">
+    <option>Looking</option>
+    <option>Confirmed</option>
+</select>
+
+<button>Add Buddy</button>
+
+</form>
+
+<button onclick="addSampleBuddies()">
+    Add 4 Sample Buddies
+</button>
+
+<h3>Search Destination</h3>
+
+<input id="sd" placeholder="Destination">
+<input id="sb" type="number" placeholder="Minimum Budget">
+
+<button onclick="searchBuddies()">Search</button>
+
+<h3>Search Buddy by ID</h3>
+
+<input id="fb" placeholder="Buddy ID">
+
+<button onclick="findBuddy()">Find</button>
+
+<h3>Update Destination and Budget</h3>
+
+<input id="ub" placeholder="Buddy ID">
+<input id="ud" placeholder="New Destination">
+<input id="ubudget" type="number" placeholder="New Budget">
+
+<button onclick="updateBuddy()">Update</button>
+
+<h3>Increase Destination Budget</h3>
+
+<input id="idestination" placeholder="Destination">
+<input id="iamount" type="number" placeholder="Amount">
+
+<button onclick="increaseBudget()">Increase</button>
+
+<h3>Budget Range</h3>
+
+<input id="minb" type="number" placeholder="Minimum Budget">
+<input id="maxb" type="number" placeholder="Maximum Budget">
+
+<button onclick="buddyRange()">Search</button>
+
+<h3>Delete Travel Buddy</h3>
+
+<input id="db" placeholder="Buddy ID">
+
+<button onclick="deleteBuddy()">Delete</button>
+
+<h3>Remaining Travel Buddies</h3>
+
+<button onclick="allBuddies()">Display Buddies</button>
+
+<pre id="buddyResult"></pre>
+
+</div>
+
+
+<script>
+
+async function req(url, options) {
+    const response = await fetch(url, options);
+    return await response.json();
+}
+
+memberForm.onsubmit = async e => {
+
+    e.preventDefault();
+
+    const data = {
+        memberId: memberId.value,
+        name: memberName.value,
+        clubName: clubName.value,
+        yearOfStudy: Number(year.value),
+        role: role.value,
+        points: Number(points.value),
+        interests: interests.value.split(","),
+        status: status.value
+    };
+
+    const result = await req("/api/members", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    alert(result.message);
+    e.target.reset();
+};
+
+async function addSampleMembers() {
+
+    const result = await req("/api/members/sample", {
+        method: "POST"
+    });
+
+    alert(result.message);
+}
+
+async function searchMembers() {
+
+    const result = await req(
+        `/api/members/search?clubName=${encodeURIComponent(sc.value)}&points=${sp.value}`
+    );
+
+    memberResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function findMember() {
+
+    const result =
+        await req(`/api/members/${fm.value}`);
+
+    memberResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function updateMember() {
+
+    const result = await req(`/api/members/${um.value}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            role: ur.value,
+            points: Number(up.value)
+        })
+    });
+
+    alert(result.message || "Member updated");
+}
+
+async function increasePoints() {
+
+    const result = await req("/api/members/club/increase", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            clubName: ic.value,
+            amount: Number(ia.value)
+        })
+    });
+
+    alert(result.message);
+}
+
+async function memberRange() {
+
+    const result = await req(
+        `/api/members/range?min=${minp.value}&max=${maxp.value}`
+    );
+
+    memberResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function deleteMember() {
+
+    const result =
+        await req(`/api/members/${dm.value}`, {
+            method: "DELETE"
+        });
+
+    alert(result.message);
+}
+
+async function allMembers() {
+
+    const result =
+        await req("/api/members");
+
+    memberResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+
+buddyForm.onsubmit = async e => {
+
+    e.preventDefault();
+
+    const data = {
+        buddyId: buddyId.value,
+        name: buddyName.value,
+        destination: destination.value,
+        age: Number(age.value),
+        budget: Number(budget.value),
+        tripDuration: duration.value,
+        interests: binterests.value.split(","),
+        status: bstatus.value
+    };
+
+    const result = await req("/api/buddies", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    alert(result.message);
+    e.target.reset();
+};
+
+async function addSampleBuddies() {
+
+    const result = await req("/api/buddies/sample", {
+        method: "POST"
+    });
+
+    alert(result.message);
+}
+
+async function searchBuddies() {
+
+    const result = await req(
+        `/api/buddies/search?destination=${encodeURIComponent(sd.value)}&budget=${sb.value}`
+    );
+
+    buddyResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function findBuddy() {
+
+    const result =
+        await req(`/api/buddies/${fb.value}`);
+
+    buddyResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function updateBuddy() {
+
+    const result = await req(`/api/buddies/${ub.value}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            destination: ud.value,
+            budget: Number(ubudget.value)
+        })
+    });
+
+    alert(result.message || "Buddy updated");
+}
+
+async function increaseBudget() {
+
+    const result = await req(
+        "/api/buddies/destination/increase",
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                destination: idestination.value,
+                amount: Number(iamount.value)
+            })
+        }
+    );
+
+    alert(result.message);
+}
+
+async function buddyRange() {
+
+    const result = await req(
+        `/api/buddies/range?min=${minb.value}&max=${maxb.value}`
+    );
+
+    buddyResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+async function deleteBuddy() {
+
+    const result =
+        await req(`/api/buddies/${db.value}`, {
+            method: "DELETE"
+        });
+
+    alert(result.message);
+}
+
+async function allBuddies() {
+
+    const result =
+        await req("/api/buddies");
+
+    buddyResult.textContent =
+        JSON.stringify(result, null, 2);
+}
+
+</script>
+
+</body>
+</html>
