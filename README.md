@@ -43,4 +43,13 @@ Via Thunder Client:
 3. In the 'Request URL' field, enter the URL of your application (e.g., http://localhost:3000) and select the HTTP method from the dropdown menu.
 5. Click on 'Send' to make the request.
 
+## Project Structure
+
+- `src/app.js` - Main application file
+- `src/index.html` - Front-end page
+- `src/routes/` - Application routes
+- `package.json` - Project dependencies and scripts
+- `Dockerfile` - Container configuration
+- `.env` - Environment variables for MongoDB connection
+
 Happy coding! 🙂
