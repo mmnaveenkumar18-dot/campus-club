@@ -52,4 +52,8 @@ Via Thunder Client:
 - `Dockerfile` - Container configuration
 - `.env` - Environment variables for MongoDB connection
 
+## Version Control
+
+This project is managed using Git and GitHub for version control and collaboration.
+
 Happy coding! 🙂
